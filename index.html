@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      (function () {
+        try {
+          var currentFetch = window.fetch ? window.fetch.bind(window) : undefined;
+          var desc = Object.getOwnPropertyDescriptor(window, "fetch") ||
+            Object.getOwnPropertyDescriptor(Window.prototype, "fetch");
+          if (desc && desc.configurable && (!desc.writable && !desc.set)) {
+            Object.defineProperty(window, "fetch", {
+              configurable: true,
+              enumerable: true,
+              get: function () {
+                return currentFetch;
+              },
+              set: function (nextFetch) {
+                if (typeof nextFetch === "function") {
+                  currentFetch = nextFetch;
+                }
+              },
+            });
+          }
+        } catch (_e) {}
+
+        window.addEventListener(
+          "error",
+          function (event) {
+            var msg = String((event && event.message) || "");
+            var filename = String((event && event.filename) || "");
+            if (
+              msg.indexOf("Cannot set property fetch") !== -1 ||
+              filename.indexOf("chrome-extension://") === 0
+            ) {
+              event.stopImmediatePropagation();
+              event.preventDefault();
+              return false;
+            }
+          },
+          true
+        );
+
+        window.addEventListener(
+          "unhandledrejection",
+          function (event) {
+            var reason = String((event && event.reason) || "");
+            if (
+              reason.indexOf("Cannot set property fetch") !== -1 ||
+              reason.indexOf("chrome-extension://") !== -1
+            ) {
+              event.stopImmediatePropagation();
+              event.preventDefault();
+            }
+          },
+          true
+        );
+      })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Milo — Apne app se | Calm Health Report Reader & Prevention Companion</title>
+    <meta name="description" content="Milo helps people in India understand diabetes, high blood pressure, kidney, and cancer reports with calm, plain-language clarity: aware, not afraid." />
+    <meta property="og:title" content="Milo — Apne app se" />
+    <meta property="og:description" content="Understand diabetes, blood pressure, and cancer reports with calm, plain-language clarity." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-[#FAF9F6] text-slate-900 antialiased selection:bg-teal-100 selection:text-teal-900">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "Milo — Apne app se",
+  "description": "Calm, plain-language lab report reader and prevention companion for diabetes, blood pressure, kidney health, and cancer reports in India.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
